@@ -1,0 +1,26 @@
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.spl
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.brf
+*.nav
+*.snm
+*.vrb
+
+# Build outputs (keep PDF for Zenodo)
+# *.pdf
+
+# Editor / OS
+*.swp
+*~
+.DS_Store
+Thumbs.db
