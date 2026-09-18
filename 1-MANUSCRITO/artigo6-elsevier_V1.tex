@@ -1,0 +1,227 @@
+%% As pendências deste manuscrito estão em tese-catuxe/PENDENCIAS.md,
+%% que é o único lugar onde o trabalho por fazer fica registrado.
+
+%%
+%% Artigo 5 -- Arquitetura Computacional de Auditoria Normativa
+%%             e Rastreabilidade para Dossiês de Salvaguarda de
+%%             Saberes Agrícolas Tradicionais Quilombolas
+%%
+%% Formatado com elsarticle.cls (Elsevier) — estilo Harvard (authoryear)
+%%
+
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times,authoryear]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,5p,times,authoryear]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn,authoryear]{elsarticle}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsmath package provides various useful equation environments.
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lineno}
+\usepackage{hyperref}
+
+\journal{Nome do Periódico}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Arquitetura computacional de auditoria normativa e rastreabilidade para salvaguarda de Saberes Agrícolas Tradicionais em comunidades quilombolas}
+
+\author[1]{Catuxe Varjão de Santana Oliveira\corref{cor1}}
+\ead{catuxe@academico.ufs.br}
+\cortext[cor1]{Autor correspondente}
+
+\author[2]{Luiz Diego Vidal Santos}
+\ead{ldvsantos@uefs.br}
+
+\author[1]{XXXXXX}
+\ead{xxxxxx@academico.ufs.br}
+
+\affiliation[1]{organization={Programa de Pós-Graduação em Ciências da Propriedade Intelectual (PPGPI), Universidade Federal de Sergipe (UFS)},
+            city={São Cristóvão},
+            state={Sergipe},
+            country={Brasil}}
+
+\affiliation[2]{organization={Departamento de Tecnologia, Universidade Estadual de Feira de Santana (UEFS)},
+            city={Feira de Santana},
+            state={Bahia},
+            country={Brasil}}
+
+\begin{abstract}
+Dossiês de salvaguarda de Saberes e Sistemas Agrícolas Tradicionais (SSAT) devem satisfazer simultaneamente requisitos heterogêneos de quatro instâncias regulatórias (IPHAN, INPI, CGen e FAO-GIAHS), e a verificação manual dessa conformidade é lenta, subjetiva e não rastreável. Este estudo tem como objetivo avaliar a eficácia probatória de uma arquitetura computacional de auditoria normativa, composta por três módulos integrados (Rede Bayesiana para conformidade estrutural, NLP/SBERT para verificação semântica e DLT permissionada para ancoragem criptográfica), na verificação automatizada da conformidade desses dossiês frente aos requisitos regulatórios. O primeiro módulo implementou uma Rede Bayesiana cujos nós corresponderam aos campos exigidos por cada instância regulatória e cujas dependências condicionais codificaram restrições de co-ocorrência, formato e completude, produzindo uma probabilidade posterior de conformidade $P(C_i \mid \mathbf{e})$ para cada instância $i$. O segundo módulo empregou representações vetoriais de sentenças (SBERT) para calcular a similaridade semântica entre os descritores textuais do dossiê e os enunciados normativos de cada marco regulatório, gerando um escore de aderência semântica $\sigma_j \in [0,1]$ para cada campo textual $j$. O terceiro módulo ancorou os artefatos documentais, incluindo \textit{hashes} dos campos do dossiê, registros de consentimento e metadados de proveniência, em uma rede de tecnologia de registro distribuído (DLT) permissionada, produzindo carimbos criptográficos verificáveis e conformidade FAIR auditável. A arquitetura foi aplicada a dossiês-piloto de 3--5 saberes de comunidades quilombolas do Território de Identidade Semiárido Nordeste~II (Bahia), gerados pela cadeia ISB/TRI-fuzzy e pelas fichas WOCAT-SLM-QBR. A hipótese (H5) postulou que os dossiês auditados computacionalmente atingissem $P(C_i \mid \mathbf{e}) \geq 0{,}85$ por instância regulatória, similaridade semântica média $\bar{\sigma} \geq 0{,}80$, taxa de ancoragem em DLT de 100\% dos campos obrigatórios e conformidade FAIR $\geq$ 80\%.
+\end{abstract}
+
+%%Graphical abstract
+%\begin{graphicalabstract}
+%\includegraphics{grabs}
+%\end{graphicalabstract}
+
+\begin{highlights}
+\item Rede Bayesiana modela dependências condicionais entre requisitos de IPHAN, INPI, CGen e FAO-GIAHS
+\item NLP/SBERT verifica aderência semântica entre campos do dossiê e descritores normativos
+\item Ancoragem em DLT permissionada garante rastreabilidade criptográfica e conformidade FAIR
+\item Cadeia ISB/TRI-fuzzy e WOCAT-SLM-QBR alimentam dossiês-piloto quilombolas
+\end{highlights}
+
+\begin{keyword}
+auditoria computacional \sep rede bayesiana \sep SBERT \sep tecnologia de registro distribuído \sep dossiês de salvaguarda \sep conformidade FAIR \sep comunidades quilombolas
+\end{keyword}
+
+\end{frontmatter}
+
+%% Numeração de linhas para revisão
+\linenumbers
+
+\section{Introdução}
+
+A expansão de sistemas agrícolas intensivos sobre biomas de alta sociobiodiversidade simplifica agroecossistemas tradicionais e erode progressivamente os repertórios de manejo que comunidades quilombolas consolidaram ao longo de gerações \cite{Altieri2004}. Sob a perspectiva da visão baseada em recursos, esses repertórios constituem capital intelectual coletivo dotado de especificidade territorial e insubstitutibilidade funcional, atributos que lhes conferem valor estratégico para a resiliência agroecológica local e, simultaneamente, tornam sua perda irreversível \cite{Barney1991,Laborde2023,Ens2016}. A vulnerabilidade desses sistemas não opera como processo unidimensional, resultando da interação entre fragilidade jurídica e fundiária, exposição climática e capacidade de organização comunitária, cujas magnitudes relativas variam conforme o contexto geográfico e institucional \cite{ReyesGarcia2013,GomezBaggethun2013,Santilli2009}. Evidências convergentes indicam que comunidades de agricultores sul-americanos concentram a maior fragilidade institucional entre os contextos estudados \cite{TangGavin2016,CamaraLeret2021}.
+
+Essa fragilidade se amplifica quando os saberes permanecem não documentados ou documentados em formatos incompatíveis com as exigências das instâncias de proteção. Saberes agrícolas quilombolas são predominantemente orais, coletivamente detidos e enraizados em práticas territorialmente específicas, de modo que sua conversão em registros formais confronta barreiras de equivalência semântica, experiencial e conceitual que os instrumentos internacionais de gestão sustentável da terra não foram desenhados para transpor \cite{Altieri2004,ReyesGarcia2013}. Enquanto o acervo permanece exclusivamente oral, além de não representável perante políticas públicas, ele fica exposto à extração não autorizada de valor, fenômeno documentado em disputas internacionais de propriedade intelectual envolvendo recursos biológicos de comunidades tradicionais \cite{Wynberg2015}. A distância entre os compromissos firmados no âmbito da Convenção sobre Diversidade Biológica e sua transposição para instrumentos jurídicos nacionais agrava a exposição, uma vez que os marcos vigentes ainda não oferecem mecanismos eficazes para tutelar saberes de natureza coletiva e dinâmica \cite{Laird2020,Santilli2009}.
+
+A insuficiência do registro documental não é hipótese teórica. Em comunidades quilombolas do semiárido baiano, a certificação pela Fundação Cultural Palmares obtida por uma delas em 2010 não avançou para as etapas subsequentes de reconhecimento, demarcação e titulação, e a ausência de documentos de posse é apontada pelos próprios moradores como a condição que viabilizou a expropriação histórica de seus territórios \cite{Fernandes2013}. O acervo probatório dessas comunidades permanece, ademais, sob guarda local em arquivos digitais e mídias removíveis, sem repositório dotado de garantia de integridade ou prova de anterioridade, de modo que o risco relevante não é a inexistência de registro, mas a impossibilidade de demonstrar sua proveniência e sua não adulteração perante terceiros.
+
+Diante dessa lacuna normativa, a proteção efetiva passa a depender da produção de dossiês documentais que traduzam os saberes em evidências verificáveis por instâncias cujos mandatos são heterogêneos e apenas parcialmente sobrepostos. O Registro de Bens Culturais de Natureza Imaterial exige descrição do bem, território de ocorrência, comunidade detentora, modos de transmissão, ameaças e documentação audiovisual \cite{IPHAN2006}. As Indicações Geográficas demandam delimitação territorial, caderno de normas, comprovação de notoriedade e vínculo geográfico \cite{Brasil1996}. O regime de acesso ao patrimônio genético requer prova de consentimento prévio informado, rastreabilidade do acesso ao conhecimento tradicional associado e termos de repartição de benefícios \cite{Brasil2015}. Os Sistemas Agrícolas de Importância Patrimonial Mundial exigem plano de manejo dinâmico, evidência de agrobiodiversidade, comprovação de resiliência e governança comunitária ativa \cite{FAO2018}. A divergência simultânea desses requisitos implica que um dossiê preparado para uma instância pode não satisfazer as exigências de outra, e a complexidade da verificação cresce com o número de marcos envolvidos \cite{BavikatteRobinson2011,Nemoga2022}.
+
+Essa verificação é convencionalmente conduzida por painéis de especialistas mediante avaliação manual, procedimento cujas limitações operacionais estão documentadas. A subjetividade inerente ao julgamento humano gera variância interavaliadores que compromete a reprodutibilidade \cite{Braun2006}, ao passo que a dependência de agendas de especialistas com alta demanda institucional inviabiliza a auditoria em volumes compatíveis com a escala de saberes a documentar. A essas restrições soma-se a ausência de rastreabilidade, que impede a verificação \textit{a posteriori} da integridade e da proveniência dos campos avaliados e compromete a aderência aos princípios FAIR de gestão de dados \cite{Wilkinson2016}.
+
+Superar essas limitações exige verificação que opere simultaneamente sobre a estrutura, o conteúdo e a proveniência do dossiê, e para cada um desses planos a literatura oferece solução consolidada. A completude estrutural envolve dependências condicionais entre campos exigidos por diferentes instâncias, de modo que a presença de um campo condiciona a conformidade de outros e constitui problema de raciocínio probabilístico sob incerteza cuja modelagem é viável por grafos direcionados acíclicos \cite{Pearl2009,Koller2009}. Já a aderência entre o conteúdo documental e os enunciados normativos não pode ser aferida por correspondência lexical, uma vez que descrições de saberes tradicionais e textos regulatórios empregam vocabulários distintos para conceitos equivalentes, o que requer representações densas capazes de capturar similaridade conceitual para além da superfície do texto \cite{Reimers2019,Devlin2019}. A validade probatória do conjunto depende de garantias de integridade, proveniência e ordenação temporal auditáveis por terceiros, requisito que registros distribuídos permissionados satisfazem mediante ancoragem criptográfica \cite{Hyperledger2020}. A lacuna reside na ausência de arquitetura que integre os três planos: soluções isoladas para cada camada são conhecidas, e a literatura consultada não apresenta sistema capaz de verificar simultaneamente conformidade estrutural, semântica e de rastreabilidade de dossiês de salvaguarda biocultural frente a múltiplos marcos regulatórios.
+
+Este estudo tem como objetivo avaliar a eficácia probatória de uma arquitetura computacional integrada de auditoria normativa na verificação de conformidade de dossiês de salvaguarda de saberes agrícolas tradicionais frente aos requisitos das quatro instâncias regulatórias consideradas, identificando os campos documentais com maior lacuna de aderência, com aplicação a comunidades quilombolas do Território de Identidade Semiárido Nordeste~II, na Bahia.
+
+Espera-se que dossiês submetidos a essa arquitetura atinjam níveis de conformidade perante as quatro instâncias superiores aos obtidos por auditoria manual convencional, com rastreabilidade criptográfica integral dos campos obrigatórios e aderência demonstrável aos princípios FAIR, e que os ganhos de reprodutibilidade se concentram nos campos cuja avaliação manual apresenta maior variância interavaliadores.
+
+
+\section{Materiais e Métodos}
+
+A arquitetura computacional de auditoria normativa foi composta por três módulos sequenciais e interoperáveis, cada qual responsável por uma camada do processo de verificação de conformidade. O módulo de Rede Bayesiana avaliou a completude estrutural dos dossiês, o módulo NLP/SBERT verificou a aderência semântica dos campos textuais e o módulo DLT ancorou criptograficamente os artefatos auditados. A entrada do sistema recebeu dossiês-piloto gerados pela cadeia fuzzy do Índice de Salvaguarda Biocultural e pelas fichas WOCAT-SLM-QBR, aplicados a 3--5 saberes de comunidades quilombolas do Território de Identidade Semiárido Nordeste~II (Bahia).
+
+\subsection{Módulo 1 --- Rede Bayesiana para auditoria de completude normativa}
+\label{subsec:bayesnet_cap5}
+
+Foi construída uma Rede Bayesiana na qual cada nó $X_j$ ($j = 1, \ldots, c$) representou um campo exigido pelo conjunto das quatro instâncias regulatórias (IPHAN, INPI, CGen, FAO-GIAHS). Cada nó assumiu estados discretos correspondentes a campo ausente ($x_j = 0$), campo presente com granularidade insuficiente ($x_j = 0{,}5$) e campo plenamente conforme ($x_j = 1$). As arestas dirigidas codificaram dependências condicionais entre campos, de modo que, por exemplo, a presença de ``delimitação territorial'' condicionou a probabilidade de conformidade de ``caderno de normas'' no dossiê INPI, ou a presença de ``prova de consentimento prévio informado'' condicionou ``rastreabilidade do acesso'' no dossiê CGen.
+
+A estrutura do grafo foi integralmente elicitada por conhecimento de especialistas (\textit{expert-elicited structure}), sem emprego de algoritmos de aprendizado de estrutura baseados em dados (PC, GES ou \textit{greedy search}), uma vez que a topologia das dependências entre campos regulatórios é determinada \textit{a priori} pelos normativos vigentes e não por padrões empíricos de co-ocorrência em amostras \cite{Pearl2009}. A elicitação procedeu em duas etapas. Os requisitos formais de cada instância regulatória foram mapeados a partir dos normativos vigentes (Decreto 3.551/2000, Lei 9.279/1996, Lei 13.123/2015, diretrizes GIAHS/FAO), complementados por entrevistas semiestruturadas com 3--5 servidores ou consultores de cada órgão, que validaram as relações de dependência condicional entre campos (por exemplo, se a presença de ``delimitação territorial'' condiciona ``caderno de normas'' no dossiê INPI). As tabelas de probabilidade condicional (CPTs) foram parametrizadas mediante combinação de opinião de especialistas e, quando disponível, frequência empírica de campos em dossiês previamente analisados por escritórios de propriedade intelectual. A aprendizagem de parâmetros (distinta da aprendizagem de estrutura) utilizou estimadores de máxima verossimilhança com \textit{priors} de Dirichlet para regularização em cenários de dados escassos \cite{Koller2009}.
+
+Para cada instância regulatória $i$, um nó-alvo $C_i$ (conformidade) foi inserido como descendente do subconjunto de campos exigidos por aquela instância. Dado um dossiê com vetor de evidência observada $\mathbf{e} = \{x_1, x_2, \ldots, x_c\}$, a inferência exata por eliminação de variáveis produziu a probabilidade posterior de conformidade:
+
+\begin{equation}
+P(C_i = 1 \mid \mathbf{e}) = \sum_{\mathbf{x} \setminus \mathbf{e}} \prod_{k} P(X_k \mid \text{pa}(X_k))
+\label{eq:bayesconf_cap5}
+\end{equation}
+
+\noindent onde $\text{pa}(X_k)$ denota os pais do nó $X_k$ no grafo. A rede foi implementada em Python 3.10+ utilizando a biblioteca \textit{pgmpy}, e a validação estrutural empregou \textit{k}-fold cross-validation ($k = 5$) sobre dossiês sintéticos gerados por amostragem ancestral a partir da rede calibrada \cite{Pearl2009}.
+
+\subsection{Módulo 2 --- Verificação semântica via SBERT}
+\label{subsec:sbert_cap5}
+
+O segundo módulo verificou se o conteúdo textual de cada campo do dossiê satisfaz semanticamente o enunciado normativo correspondente, transcendendo a mera detecção de presença/ausência executada pelo Módulo~1. Para cada instância regulatória $i$, os $r_i$ enunciados normativos foram compilados em um corpus de referência $\mathcal{R}_i = \{d_1, d_2, \ldots, d_{r_i}\}$, onde cada $d_j$ corresponde à descrição normativa do campo exigido.
+
+As representações vetoriais de sentenças foram geradas pelo modelo SBERT \textit{all-MiniLM-L6-v2} \cite{Reimers2019}, que produz \textit{embeddings} de 384 dimensões a partir da arquitetura Transformer com \textit{pooling} médio \cite{Devlin2019}. Para cada campo textual $t_j$ do dossiê e seu enunciado normativo correspondente $d_j$, a aderência semântica foi calculada pela similaridade cosseno:
+
+\begin{equation}
+\sigma_j = \frac{\text{SBERT}(t_j) \cdot \text{SBERT}(d_j)}{\|\text{SBERT}(t_j)\| \; \|\text{SBERT}(d_j)\|}
+\label{eq:cosseno_cap5}
+\end{equation}
+
+O escore de aderência semântica por instância regulatória correspondeu à média dos $\sigma_j$ sobre os $r_i$ campos textuais:
+
+\begin{equation}
+\bar{\sigma}_i = \frac{1}{r_i} \sum_{j=1}^{r_i} \sigma_j
+\label{eq:sigma_mean_cap5}
+\end{equation}
+
+Campos com $\sigma_j < 0{,}60$ foram classificados como ``semanticamente não aderentes'' e sinalizados para revisão. A avaliação do limiar de corte foi conduzida mediante curva ROC sobre um conjunto de pares campo-enunciado anotados manualmente ($n \geq 100$) como aderentes ou não aderentes, selecionando-se o ponto que maximize a estatística $J$ de Youden. A reprodutibilidade dos escores foi avaliada por reamostragem \textit{bootstrap} (1000 iterações) com cálculo de intervalo de confiança de 95\% para $\bar{\sigma}_i$.
+
+A adaptação ao domínio de propriedade intelectual de conhecimentos tradicionais, que contém vocabulário técnico-jurídico e culturalmente específico, foi avaliada mediante comparação com representações baseadas em TF-IDF e com o modelo multilíngue \textit{paraphrase-multilingual-MiniLM-L12-v2}, caso o corpus em português brasileiro apresentasse degradação de desempenho no modelo monolíngue. As métricas de avaliação incluíram acurácia, F1-score e AUC-ROC sobre o conjunto anotado.
+
+O conjunto de avaliação manual ($n \geq 100$ pares campo-enunciado) foi anotado por dois avaliadores independentes com formação em propriedade intelectual e conhecimento de normativos de salvaguarda, utilizando a ferramenta de anotação Doccano \cite{Nakayama2018}. O guia de anotação especificou critérios objetivos para classificação de cada par como ``aderente'' ou ``não aderente'', com exemplos-âncora por instância regulatória. A concordância inter-anotadores foi aferida pelo coeficiente kappa de Cohen, adotando $\kappa \geq 0{,}70$ como limiar de concordância substancial \cite{Landis1977}. Discordâncias foram resolvidas por terceiro avaliador sênior.
+
+\subsection{Módulo 3 --- Ancoragem criptográfica em DLT permissionada}
+\label{subsec:dlt_cap5}
+
+O terceiro módulo garantiu a rastreabilidade, a imutabilidade e a verificabilidade dos dossiês auditados mediante ancoragem em rede de tecnologia de registro distribuído (DLT) permissionada. A escolha de rede permissionada é motivada por três requisitos do contexto de salvaguarda de conhecimentos tradicionais. O controle de acesso diferenciado permite que campos sensíveis (conhecimentos sagrados, receitas familiares) sejam restritos a participantes autorizados pela comunidade. A governança institucional distribui a autoridade de validação de transações entre os nós operados por universidades, NITs e órgãos regulatórios, sem depender de mineração aberta. E a eficiência energética e a latência reduzida permitem ancoragem de alto volume sem os custos computacionais de redes públicas.
+
+A ancoragem seguiu protocolo de registro em dois níveis. No primeiro nível, cada campo auditado do dossiê (texto, pontuação ISB, coordenadas, registros de consentimento) foi submetido a função \textit{hash} criptográfica (SHA-256), produzindo uma impressão digital $h_j = \text{SHA256}(t_j)$. No segundo nível, os \textit{hashes} individuais foram combinados em uma \textit{Merkle tree} cuja raiz foi registrada como transação na DLT, acompanhada de carimbo temporal (\textit{timestamp}) e identificadores do dossiê e da comunidade:
+
+\begin{equation}
+\text{MerkleRoot} = H\Bigl(H(h_1 \| h_2) \;\|\; H(h_3 \| h_4) \;\|\; \ldots\Bigr)
+\label{eq:merkle_cap5}
+\end{equation}
+
+\noindent onde $H(\cdot)$ denota SHA-256 e $\|$ denota concatenação. A verificação \textit{a posteriori} da integridade de qualquer campo individual do dossiê foi realizada pela recomputação do caminho de \textit{Merkle} até a raiz registrada na DLT, em tempo $O(\log n)$.
+
+A conformidade com os princípios FAIR \cite{Wilkinson2016} foi operacionalizada mediante metadados estruturados em esquema JSON-LD associados a cada transação, contendo identificadores persistentes (DOI ou \textit{handle}), licenças de acesso, vocabulários controlados e procedência. A implementação utilizou a plataforma Hyperledger Fabric 2.x \cite{Hyperledger2020} com rede de três organizações participantes (universidade, NIT e órgão regulatório piloto), contratos inteligentes (\textit{chaincode}) em Go para validação de esquema e dois nós de ordenação (\textit{ordering service}) com consenso Raft. A avaliação de desempenho contemplou vazão (\textit{throughput}, transações por segundo), latência de confirmação e taxa de sucesso de verificação de integridade sobre $n \geq 50$ dossiês-piloto.
+
+O processamento dos dossiês (Módulos~1 e~2) operou em modo \textit{offline-first}, permitindo que a auditoria de completude e a verificação semântica fossem executadas localmente sem conexão à rede DLT, dado que a infraestrutura de conectividade em comunidades rurais do semiárido pode ser intermitente. Os \textit{hashes} e metadados gerados em modo offline foram armazenados em fila local persistente e ancorados em lote na DLT quando a conectividade foi restabelecida, preservando a integridade temporal mediante carimbo de horário local assinado digitalmente pelo nó da universidade. A sincronização periódica verificou a consistência entre os registros locais e a cadeia distribuída, sinalizando eventuais divergências para resolução manual.
+
+A gestão de identidades e chaves criptográficas seguiu o modelo de Autoridade Certificadora (CA) do Hyperledger Fabric, com certificados X.509 emitidos pela CA da organização participante de cada nó. A revogação de acesso foi operacionalizada mediante Listas de Revogação de Certificados (CRLs) atualizadas periodicamente nos canais da rede. Comunidades detentoras de saberes puderam solicitar, mediante registro formal junto à associação comunitária local, a revogação de acesso a campos específicos do dossiê ou a restrição de visibilidade de campos sensíveis (conhecimentos sagrados, receitas familiares) após a publicação inicial, desencadeando atualização das políticas de controle de acesso nos contratos inteligentes. A rotação de chaves seguiu periodicidade anual para certificados de organizações participantes e foi documentada no registro de auditoria da rede.
+
+\subsection{Protocolo experimental e métricas de avaliação}
+\label{subsec:protocol_cap5}
+
+A avaliação da arquitetura foi conduzida sobre dossiês-piloto de 3--5 saberes de comunidades quilombolas do Território de Identidade Semiárido Nordeste~II (Bahia), gerados pela cadeia computacional fuzzy do Índice de Salvaguarda Biocultural e pelas fichas WOCAT-SLM-QBR. Cada dossiê conteve perfil do saber (WOCAT-SLM-QBR adaptado), escore ISB com perfil de vulnerabilidade por dimensão ($V_1$--$V_8$, sistema de inferência fuzzy tipo Mamdani), metadados de rastreabilidade (proveniência, consentimento, cadeia de custódia documental) e material audiovisual. Cada dossiê foi formatado em versões específicas para cada instância regulatória (IPHAN, INPI, CGen, FAO-GIAHS).
+
+As métricas de avaliação incluíram, para o Módulo~1, a probabilidade posterior de conformidade $P(C_i \mid \mathbf{e})$ por instância regulatória (meta $\geq 0{,}85$), o número de campos com estados parciais ($x_j = 0{,}5$) e a análise de sensibilidade mediante \textit{d}-separação para identificar campos com maior efeito marginal sobre a conformidade. Para o Módulo~2, a aderência semântica média $\bar{\sigma}_i$ por instância (meta $\geq 0{,}80$), a proporção de campos não aderentes ($\sigma_j < 0{,}60$) e as métricas de classificação (AUC-ROC, F1-score) sobre o conjunto anotado. Para o Módulo~3, a taxa de ancoragem (meta de 100\% dos campos obrigatórios), a conformidade FAIR (meta $\geq$ 80\% segundo métricas de \citet{Wilkinson2016}), a taxa de sucesso de verificação de integridade e as métricas de desempenho da rede DLT (latência, vazão).
+
+Um mapa de conformidade (\textit{compliance map}) consolidou os resultados dos três módulos em representação visual integrada, sinalizando para cada campo do dossiê o estado de completude (Módulo~1), a aderência semântica (Módulo~2) e o estado de ancoragem criptográfica (Módulo~3).
+
+\subsection{Aspectos Éticos}
+
+Os dossiês-piloto utilizados neste estudo foram gerados a partir de dados coletados junto a comunidades quilombolas do Território de Identidade Semiárido Nordeste~II (Bahia), com aprovação do Comitê de Ética em Pesquisa da Universidade Federal de Sergipe (CEP-UFS), sob o CAAE~\textbf{96596826.9.0000.5546}, em conformidade com as Resoluções CNS nº~466/2012 e nº~510/2016. Todos os registros empregados possuem consentimento documentado e foram anonimizados, em conformidade com a Lei nº~13.709/2018 (LGPD). Conhecimentos tradicionais sensíveis foram tratados conforme o Protocolo de Nagoia e a Lei nº~13.123/2015.
+
+
+\section{Resultados}
+
+\subsection{Rede Bayesiana e conformidade estrutural}
+\label{subsec:res_bayes_cap5}
+
+A estrutura da Rede Bayesiana (topologia, CPTs) e as probabilidades posteriores de conformidade $P(C_i \mid \mathbf{e})$ foram reportadas por instância regulatória. A análise de sensibilidade identificou os campos com maior influência marginal sobre a conformidade institucional, revelando potenciais gargalos estruturais na cadeia documental.
+
+\subsection{Aderência semântica e diagnóstico NLP}
+\label{subsec:res_sbert_cap5}
+
+Os escores de aderência semântica $\bar{\sigma}_i$ foram reportados por instância regulatória e por campo, com distribuição dos $\sigma_j$ individuais. A proporção de campos não aderentes ($\sigma_j < 0{,}60$) e as métricas de classificação sobre o conjunto anotado foram apresentadas. Campos com baixa aderência foram detalhados com análise qualitativa do desalinhamento textual entre dossiê e normativo.
+
+\subsection{Ancoragem criptográfica e conformidade FAIR}
+\label{subsec:res_dlt_cap5}
+
+A taxa de ancoragem em DLT, a taxa de sucesso de verificação de integridade e as métricas de desempenho da rede (latência, vazão) foram reportadas. A conformidade FAIR foi detalhada por princípio (F, A, I, R) e por dossiê. Eventuais falhas de ancoragem ou degradação de desempenho foram documentadas com análise de causas.
+
+\subsection{Mapa de conformidade integrado}
+\label{subsec:res_map_cap5}
+
+O mapa de conformidade consolidou os resultados dos três módulos, identificando campos do dossiê com alta conformidade em todas as camadas (completude, semântica, ancoragem) e campos que requerem intervenção prioritária. A representação visual integrou resultados quantitativos e permitiu comparação entre instâncias regulatórias.
+
+
+\section{Discussão}
+
+
+\section{Conclusão}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references}
+
+
+%% ============================================================
+%% APÊNDICE
+%% ============================================================
+%\appendix
+%\section{Material suplementar}
+%\label{app:supp}
+
+
+\end{document}
